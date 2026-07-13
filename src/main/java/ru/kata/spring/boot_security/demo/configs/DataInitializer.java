@@ -14,14 +14,17 @@ import java.util.Set;
 @Component
 public class DataInitializer implements CommandLineRunner {
 
+
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
 
-    public DataInitializer(RoleRepository roleRepository,
-                           UserRepository userRepository,
-                           PasswordEncoder passwordEncoder) {
+    public DataInitializer(
+            RoleRepository roleRepository,
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+    ) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -30,6 +33,7 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
+
 
         Role adminRole = roleRepository.findByRole("ROLE_ADMIN");
 
@@ -47,33 +51,43 @@ public class DataInitializer implements CommandLineRunner {
         }
 
 
-        if (userRepository.findByUsername("admin") == null) {
 
-            Set<Role> adminRoles = new HashSet<>();
-            adminRoles.add(adminRole);
+        if (userRepository.findByUsername("admin").isEmpty()) {
 
-            User admin = new User(
-                    "admin",
-                    passwordEncoder.encode("admin"),
-                    "admin@mail.ru",
-                    adminRoles
-            );
+
+            Set<Role> roles = new HashSet<>();
+
+            roles.add(adminRole);
+
+
+            User admin = new User();
+
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("admin"));
+            admin.setEmail("admin@mail.ru");
+            admin.setRoles(roles);
+
 
             userRepository.save(admin);
         }
 
 
-        if (userRepository.findByUsername("user") == null) {
 
-            Set<Role> userRoles = new HashSet<>();
-            userRoles.add(userRole);
+        if (userRepository.findByUsername("user").isEmpty()) {
 
-            User user = new User(
-                    "user",
-                    passwordEncoder.encode("user"),
-                    "user@mail.ru",
-                    userRoles
-            );
+
+            Set<Role> roles = new HashSet<>();
+
+            roles.add(userRole);
+
+
+            User user = new User();
+
+            user.setUsername("user");
+            user.setPassword(passwordEncoder.encode("user"));
+            user.setEmail("user@mail.ru");
+            user.setRoles(roles);
+
 
             userRepository.save(user);
         }

@@ -22,7 +22,8 @@ public class User implements UserDetails {
 
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -30,8 +31,10 @@ public class User implements UserDetails {
     )
     private Set<Role> roles = new HashSet<>();
 
+
     public User() {
     }
+
 
     public User(String username, String password, String email, Set<Role> roles) {
         this.username = username;
@@ -40,39 +43,16 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+
     public Long getId() {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
 
     @Override
     public String getUsername() {
@@ -80,9 +60,45 @@ public class User implements UserDetails {
     }
 
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+
     @Override
     public String getPassword() {
         return password;
+    }
+
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
     }
 
 
@@ -108,5 +124,4 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
-
 }

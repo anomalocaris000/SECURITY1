@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.service;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
@@ -9,6 +8,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
+
 
     private final UserRepository userRepository;
 
@@ -26,7 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElse(null);
     }
 
 
@@ -44,19 +45,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
 
-
-    @Override
-    public User loadUserByUsername(String username) {
-
-        User user = userRepository.findByUsername(username);
-
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-
-        return user;
+        return userRepository.findByUsername(username)
+                .orElseThrow();
     }
 }
