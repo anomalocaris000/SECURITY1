@@ -10,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+
 @Component
 public class SuccessUserHandler implements AuthenticationSuccessHandler {
+
 
     @Override
     public void onAuthenticationSuccess(
@@ -20,17 +22,23 @@ public class SuccessUserHandler implements AuthenticationSuccessHandler {
             Authentication authentication
     ) throws IOException, ServletException {
 
+
+        boolean isAdmin = false;
+
+
         for (GrantedAuthority authority : authentication.getAuthorities()) {
 
             if (authority.getAuthority().equals("ROLE_ADMIN")) {
-                response.sendRedirect("/admin");
-                return;
+                isAdmin = true;
+                break;
             }
+        }
 
-            if (authority.getAuthority().equals("ROLE_USER")) {
-                response.sendRedirect("/user");
-                return;
-            }
+
+        if (isAdmin) {
+            response.sendRedirect("/admin");
+        } else {
+            response.sendRedirect("/user");
         }
     }
 }

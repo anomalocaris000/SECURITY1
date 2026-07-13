@@ -47,7 +47,19 @@ public class AdminController {
 
     @PostMapping("/update")
     public String updateUser(@ModelAttribute User user) {
-        userService.save(user);
+
+        User existingUser = userService.findById(user.getId());
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setRoles(user.getRoles());
+
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            existingUser.setPassword(user.getPassword());
+        }
+
+        userService.save(existingUser);
+
         return "redirect:/admin";
     }
 
@@ -64,7 +76,9 @@ public class AdminController {
 
     @PostMapping("/save")
     public String saveUser(@ModelAttribute User user) {
+
         userService.save(user);
+
         return "redirect:/admin";
     }
 }
