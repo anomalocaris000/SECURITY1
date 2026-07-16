@@ -15,7 +15,8 @@ public class AdminController {
     private final RoleRepository roleRepository;
 
 
-    public AdminController(UserService userService, RoleRepository roleRepository) {
+    public AdminController(UserService userService,
+                           RoleRepository roleRepository) {
         this.userService = userService;
         this.roleRepository = roleRepository;
     }
@@ -23,49 +24,15 @@ public class AdminController {
 
     @GetMapping
     public String adminPage(Model model) {
+
         model.addAttribute("users", userService.findAll());
+
         return "admin";
     }
 
 
-    @GetMapping("/delete/{id}")
-    public String deleteUser(@PathVariable Long id) {
-        userService.delete(id);
-        return "redirect:/admin";
-    }
-
-
-    @GetMapping("/edit/{id}")
-    public String editUser(@PathVariable Long id, Model model) {
-
-        model.addAttribute("user", userService.findById(id));
-        model.addAttribute("roles", roleRepository.findAll());
-
-        return "edit";
-    }
-
-
-    @PostMapping("/update")
-    public String updateUser(@ModelAttribute User user) {
-
-        User existingUser = userService.findById(user.getId());
-
-        existingUser.setUsername(user.getUsername());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setRoles(user.getRoles());
-
-        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
-            existingUser.setPassword(user.getPassword());
-        }
-
-        userService.save(existingUser);
-
-        return "redirect:/admin";
-    }
-
-
     @GetMapping("/new")
-    public String newUser(Model model) {
+    public String createUser(Model model) {
 
         model.addAttribute("user", new User());
         model.addAttribute("roles", roleRepository.findAll());
@@ -75,10 +42,67 @@ public class AdminController {
 
 
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute User user) {
+    public String saveUser(@ModelAttribute("user") User user) {
 
         userService.save(user);
 
         return "redirect:/admin";
     }
+
+
+
+    @GetMapping("/edit/{id}")
+    public String editUser(@PathVariable Long id,
+                           Model model) {
+
+
+        User user = userService.findById(id);
+
+
+        model.addAttribute("user", user);
+        model.addAttribute("roles", roleRepository.findAll());
+
+
+        return "edit";
+    }
+
+
+
+    @PostMapping("/update")
+    public String updateUser(@ModelAttribute User user) {
+
+
+        userService.update(user);
+
+
+        return "redirect:/admin";
+    }
+
+
+
+    @GetMapping("/delete/{id}")
+    public String deletePage(@PathVariable Long id,
+                             Model model) {
+
+
+        model.addAttribute(
+                "user",
+                userService.findById(id)
+        );
+
+        return "delete";
+    }
+
+
+
+    @PostMapping("/delete")
+    public String deleteUser(@ModelAttribute User user) {
+
+
+        userService.deleteById(user.getId());
+
+
+        return "redirect:/admin";
+    }
+
 }

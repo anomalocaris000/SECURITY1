@@ -1,44 +1,169 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Create user</title>
+    <meta charset="UTF-8">
+    <title>New User</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        .modal-custom-width {
+            max-width: 480px;
+            margin: 30px auto;
+        }
+
+        .form-container {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        label {
+            font-weight: bold;
+        }
+    </style>
+
 </head>
-<body>
 
-<h1>Create user</h1>
+<body class="bg-light">
 
-<form th:action="@{/admin/save}" th:object="${user}" method="post">
 
-    <p>
-        Username:
-        <input type="text" th:field="*{username}">
-    </p>
+<div class="modal-dialog modal-custom-width shadow-lg">
 
-    <p>
-        Password:
-        <input type="password" th:field="*{password}">
-    </p>
+    <div class="modal-content">
 
-    <p>
-        Email:
-        <input type="text" th:field="*{email}">
-    </p>
 
-    <p>
-        Roles:
-        <select multiple th:field="*{roles}" required>
-            <option th:each="role : ${roles}"
-                    th:value="${role.id}"
-                    th:text="${role.role}">
-            </option>
-        </select>
-    </p>
+        <div class="modal-header py-2">
 
-    <button type="submit">Save</button>
+            <h5 class="modal-title">
+                New user
+            </h5>
 
-</form>
+            <a href="/admin"
+               class="close">
+                &times;
+            </a>
 
-<a href="/admin">Back</a>
+        </div>
+
+
+        <div class="modal-body">
+
+
+            <div class="form-container text-center">
+
+
+                <form th:action="@{/admin/save}"
+                      th:object="${user}"
+                      method="post">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Username
+                        </label>
+
+                        <input type="text"
+                               class="form-control form-control-sm"
+                               th:field="*{username}"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Email
+                        </label>
+
+                        <input type="email"
+                               class="form-control form-control-sm"
+                               th:field="*{email}"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Password
+                        </label>
+
+                        <input type="password"
+                               class="form-control form-control-sm"
+                               th:field="*{password}"
+                               required>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Role
+                        </label>
+
+
+                        <select class="form-control form-control-sm"
+                                multiple
+                                size="2"
+                                th:field="*{roles}"
+                                required>
+
+
+                            <option th:each="role : ${roles}"
+                                    th:value="${role.id}"
+                                    th:text="${role.role}">
+                            </option>
+
+
+                        </select>
+
+
+                    </div>
+
+
+
+                    <div class="d-flex justify-content-end mt-4 border-top pt-2">
+
+
+                        <a href="/admin"
+                           class="btn btn-secondary btn-sm mr-2">
+                            Close
+                        </a>
+
+
+                        <button type="submit"
+                                class="btn btn-success btn-sm">
+                            Add user
+                        </button>
+
+
+                    </div>
+
+
+                </form>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
 
 </body>
 </html>

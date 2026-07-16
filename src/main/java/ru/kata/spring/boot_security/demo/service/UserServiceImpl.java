@@ -37,14 +37,19 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    @Override
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
+    }
+
+
     @Override
     public void save(User user) {
 
-        if (!user.getPassword().startsWith("$2a$")) {
-            user.setPassword(
-                    passwordEncoder.encode(user.getPassword())
-            );
-        }
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
 
         userRepository.save(user);
     }
@@ -67,22 +72,43 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(User user) {
 
+
         User oldUser = userRepository.findById(user.getId())
                 .orElseThrow();
 
 
-        oldUser.setUsername(user.getUsername());
-        oldUser.setEmail(user.getEmail());
-        oldUser.setRoles(user.getRoles());
+
+        oldUser.setUsername(
+                user.getUsername()
+        );
 
 
-        if (!user.getPassword().isEmpty()) {
+        oldUser.setEmail(
+                user.getEmail()
+        );
+
+
+        oldUser.setRoles(
+                user.getRoles()
+        );
+
+
+
+        if (user.getPassword() != null
+                && !user.getPassword().isEmpty()) {
+
+
             oldUser.setPassword(
-                    passwordEncoder.encode(user.getPassword())
+                    passwordEncoder.encode(
+                            user.getPassword()
+                    )
             );
+
         }
 
 
+
         userRepository.save(oldUser);
+
     }
 }
